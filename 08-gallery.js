@@ -19,20 +19,19 @@ function createGallery(gallery) {
     return gallery.map(({ preview, original, description }) => {
         return `
     <li class="gallery__item">
-        
+        <a
+            class="gallery__link"
+            href="${original}"
+        >
             <img
                 class="gallery__image"
                 src="${preview}"
                 data-source="${original}"
                 alt="${description}"
             />
-        
+        </a>
     </li>
     `
-        {/* <a
-            class="gallery__link"
-            href="${original}"
-        > */}
     }).join('');
 }
 
@@ -43,6 +42,8 @@ function onGalleryContainerClick(evt) {
         return;
     }
     const inGalleryBigImage = evt.target.dataset.source;
+
+    evt.preventDefault();
 
     changeImageOnLightbox(inGalleryBigImage);
 }
