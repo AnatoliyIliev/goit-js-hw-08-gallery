@@ -13,6 +13,9 @@ refs.galleryContainer.insertAdjacentHTML('beforeend', cardsGallery);
 refs.galleryContainer.addEventListener('click', onGalleryContainerClick);
 refs.galleryContainer.addEventListener('click', onOpenModal);
 refs.closeModalLightboxGallary.addEventListener('click', closeOpenModal);
+refs.lightboxContainer.addEventListener('click', closeOpenModalOverlay);
+window.addEventListener('keydown', closeOpenModalESC);
+refs.galleryContainer.addEventListener('click', flippingGalleryLeftRight);
 
 //Создание и рендер разметки.
 function createGallery(gallery) {
@@ -49,7 +52,11 @@ function onGalleryContainerClick(evt) {
 }
 
 // Открытие модального окна
-function onOpenModal() {
+function onOpenModal(evt) {
+    const isTargetSwatchEl = evt.target.classList.contains('gallery__image');
+    if (!isTargetSwatchEl) {
+        return;
+    }
     refs.lightboxContainer.classList.add('is-open');    
 }
 
@@ -69,4 +76,33 @@ function closeOpenModal() {
 //Очистка значения атрибута `src` элемента `img.lightbox__image`
 function removeImageOnLightbox() {
     refs.imageContainer.src = '';
+}
+
+//Закрытие модального окна по клику на `div.lightbox__overlay`.
+function closeOpenModalOverlay() {
+    closeOpenModal();
+}
+
+//Закрытие модального окна по нажатию клавиши `ESC`.
+function closeOpenModalESC(evt) {
+    if (evt.keyCode === 27) {
+        closeOpenModal()
+    }
+}
+
+//Пролистывание изображений галереи в открытом модальном окне клавишами "влево" и "вправо".
+function flippingGalleryLeftRight(evt) {
+    // console.log(evt.target.src);
+    // console.log(gallery);
+    const imgTarget = evt.target.src;
+    // gallery.forEach(obj => {
+        // console.log(obj.preview);
+        // console.log(gallery.preview.findIndex(imgTarget));
+    
+    // })
+        
+        // .indexOf(imgTarget)
+  
+    
+    console.log(gallery.findIndex(imgTarget));
 }
