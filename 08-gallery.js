@@ -15,8 +15,8 @@ refs.galleryContainer.addEventListener('click', onOpenModal);
 refs.closeModalLightboxGallary.addEventListener('click', closeModal);
 refs.lightboxContainer.addEventListener('click', closeModalOverlay);
 window.addEventListener('keydown', closeModalESC);
-refs.galleryContainer.addEventListener('click', flippingGalleryLeftRight);
-
+// refs.galleryContainer.addEventListener('click', flippingGalleryLeftRight);
+refs.galleryContainer.addEventListener('keydown', flippingGalleryLeftRight);
 
 //Создание и рендер разметки.
 function createGallery(gallery) {
@@ -62,9 +62,8 @@ function onOpenModal(evt) {
 }
 
 //Подмена значения атрибута `src` элемента `img.lightbox__image`
-function changeImageOnLightbox(img) {  
-    refs.imageContainer.src = `${img}`;
-    // console.log(lightboxContainer);
+function changeImageOnLightbox(img) {
+    refs.imageContainer.src = `${img}`;   
 }
 
 //Закрытие модального окна по клику на кнопку
@@ -93,37 +92,21 @@ function closeModalESC(evt) {
 
 //Пролистывание изображений галереи в открытом модальном окне клавишами "влево" и "вправо".
 function flippingGalleryLeftRight(evt) {
-    const imgTarget = evt.target.dataset.source; 
-    const indexImage = gallery.findIndex((gal, ind) => {
-        if(gal.original === imgTarget){
-            return ind;
-        }
-    });
-
-    // console.log(indexImage);
+    const imgTarget = refs.imageContainer.src;
+    const indexImage = gallery.map(gal => {
+        return gal.original;
+    }).indexOf(imgTarget);
     
-    refs.galleryContainer.addEventListener('keydown', (evt) => {
-        // console.log(indexImage);
-        // console.log(evt.keyCode);
-            // Left
-        if (evt.keyCode == 37 && indexImage >= 0){
-            // console.log(indexImage - 1);
-            console.log(gallery[(indexImage - 1)].original);
-        //    const moveLeft = gallery[indexImage - 1];
-        //    console.log(moveLeft);
-        //    console.log(refs.imageContainer.src);
-            // refs.imageContainer.src = `${img}`;
+    if (indexImage <= gallery.length && indexImage >= 0) {
+        if (evt.keyCode === 37) {
+            const moveLeft = gallery[(indexImage - 1)].original;
 
-            // changeImageOnLightbox(inGalleryBigImage);
+            changeImageOnLightbox(moveLeft);
+
+        } else if (evt.keyCode === 39) {
+            const moveRight = gallery[(indexImage + 1)].original;
+            
+            changeImageOnLightbox(moveRight);
         }
-
-        //Right
-        if (evt.keyCode == 39 && indexImage <= gallery.length){
-            const moveRight = gallery[indexImage + 1];
-
-            // changeImageOnLightbox(inGalleryBigImage);
-        }
-    });
-
+    }    
 }
-
